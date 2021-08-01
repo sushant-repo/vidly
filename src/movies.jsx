@@ -1,13 +1,21 @@
 import React, { Component } from 'react'
+import Like from './common/like';
 import {getMovies} from "./services/fakeMovieService";
 class Movies extends Component{
     state = {
-        movies: getMovies(),
+        movies: getMovies()
     };
 
     handleDelete = (movie) => {
         const movies = this.state.movies.filter((m) => m._id !== movie._id);
         //if key and value are same you can just write the key
+        this.setState({movies});
+    }
+    handleLike =(movie) => {
+        console.log(movie);
+        const movies = [...this.state.movies];
+        const index = movies.indexOf(movie);
+        movies[index].isLiked = !movies[index].isLiked;
         this.setState({movies});
     }
 
@@ -27,6 +35,7 @@ render(){
                     <th scope="col">Stock</th>
                     <th scope="col">Rate</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +45,9 @@ render(){
                             <th scope="row">{movie.genre.name}</th>
                             <th scope="row">{movie.numberInStock}</th>
                             <th scope="row">{movie.dailyRentalRate}</th>
+                            <th scope="row" >
+                                <Like onClick={() => this.handleLike(movie)} liked={movie.isLiked}/>
+                            </th>
                             <th scope="row"><button className="btn btn-danger" onClick={() => this.handleDelete(movie)}>Delete</button></th>
                         </tr>
                     ))}
